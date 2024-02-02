@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEditor;
 
 public class WaveFunction3D : MonoBehaviour
 {
@@ -22,10 +23,11 @@ public class WaveFunction3D : MonoBehaviour
 
     [Header("Path generation")]
 
-    private bool generandoCamino = true;
-        
-    [SerializeField] private Tile3D downPath,        
-        leftRight, leftDown, rightDown, downLeft, downRight;
+    [SerializeField] private Tile3D downPath;
+    [SerializeField] private Tile3D curvePath;
+
+
+    private Tile3D leftRight, leftDown, rightDown, downLeft, downRight;
 
     private int curX;
     private int curY;
@@ -35,7 +37,7 @@ public class WaveFunction3D : MonoBehaviour
     private bool continueLeft = false;
     private bool continueRight = false;
     private int currentCount = 0;               //Each 3 equal iterations it is forced to change direction
-
+    private bool generandoCamino = true;
     private enum CurrentDirection
     {
         LEFT,
@@ -48,11 +50,25 @@ public class WaveFunction3D : MonoBehaviour
 
     void Awake()
     {
+        ClearNeighbours();
         CreateRemainingCells();
         DefineNeighbourTiles();
         gridComponents = new List<Cell3D>();
         InitializeGrid();
     }
+
+    void ClearNeighbours()
+    {
+        foreach(Tile3D tile in tileObjects)
+        {
+            tile.upNeighbours.Clear();
+            tile.rightNeighbours.Clear();
+            tile.downNeighbours.Clear();
+            tile.leftNeighbours.Clear();
+        }
+    }
+
+
 
     //---------------Look if we have to create more tiles-------------------
     void CreateRemainingCells()
@@ -275,25 +291,35 @@ public class WaveFunction3D : MonoBehaviour
         {
             for (float x = 0; x < dimensions; x++)
             {
-                Cell3D newCell = Instantiate(cellObj, new Vector3(x, 0, z), Quaternion.identity);
+                Cell3D newCell = Instantiate(cellObj, new Vector3(x, 0, z), Quaternion.identity, gameObject.transform);
                 newCell.CreateCell(false, tileObjects);
                 gridComponents.Add(newCell);
             }
         }
-        // StartCoroutine(GeneratePath());
+        //StartCoroutine(GeneratePath());
         generandoCamino = false;
         StartCoroutine(CheckEntropy());
     }
 
 
     //---------MAKE THE PATH---------
-
+    //El camino siempre será de arriba a abajo.
     IEnumerator GeneratePath()
     {
         curX = UnityEngine.Random.Range(0, dimensions);
         curY = 0;
 
         tileToUse = downPath;
+
+
+        //Ajustar las tiles
+
+        //Curvas
+        if(curvePath.upBorder == Tile3D.Border.PATH && curvePath.leftBorder == Tile3D.Border.PATH)
+        {
+
+        }
+
 
         while (curY <= dimensions - 1)
         {
@@ -617,7 +643,7 @@ IEnumerator CheckEntropy()
 
         instantiatedTile.gameObject.SetActive(true);
 
-        //CheckExtras(foundTile, cellToCollapse.transform);
+        CheckExtras(foundTile, cellToCollapse.transform);
 
         UpdateGeneration();
     }
@@ -683,7 +709,7 @@ IEnumerator CheckEntropy()
                 {
                     newGenerationCell[index] = gridComponents[index];
                 }
-                else// if(ReviseTileOptions(x, y))
+                else if(ReviseTileOptions(x, y))
                 {
                     gridComponents[index].haSidoVisitado = true;
                     List<Tile3D> options = new List<Tile3D>();
@@ -901,4 +927,22 @@ IEnumerator CheckEntropy()
 
         return false;
     }
+
+
+    //TO DO: Que se active solo cuando no se esté generando un mapa
+    public void Regenerate()
+    {
+        //Borrar todas las celdas
+        for (int i = gameObject.transform.childCount-1; i>=0; i--)
+        {
+            Destroy(gameObject.transform.GetChild(i).gameObject);
+        }
+
+        iterations = 0;
+        gridComponents.Clear();
+
+        InitializeGrid();
+    }
+
+
 }

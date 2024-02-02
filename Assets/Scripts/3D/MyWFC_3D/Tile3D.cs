@@ -27,6 +27,9 @@ public class Tile3D : MonoBehaviour
     public List<Tile3D> downNeighbours = new List<Tile3D>();
     public List<Tile3D> leftNeighbours = new List<Tile3D>();
 
+    [Tooltip("Para definir la direccion la derecha siempre será el eje X (rojo) y arriba será el eje Z (azul)")]
+    [Header("Borders")]
+    
     public Border upBorder; //Z
     public Border rightBorder; //X
     public Border leftBorder; //-X

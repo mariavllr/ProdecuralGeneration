@@ -104,7 +104,8 @@ MonoBehaviour:
   rotateRight: 1
   rotate180: 1
   rotateLeft: 1
-  _transform: {fileID: 9026270062398427130}
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
   upNeighbours: []
   rightNeighbours: []
   downNeighbours: []

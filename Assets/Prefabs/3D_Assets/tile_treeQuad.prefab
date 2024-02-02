@@ -269,17 +269,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7667c1a22ac71c4f9adbab1ef051b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 3
+  probability: 10
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
   rotateRight: 0
   rotate180: 0
   rotateLeft: 0
-  _transform: {fileID: 3230556919252720174}
-  upNeighbours: []
-  rightNeighbours: []
-  downNeighbours: []
-  leftNeighbours: []
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
+  upNeighbours:
+  - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
+  - {fileID: 8381501337213970966, guid: d422bee52c9bcfc4eb92f6eee59ae7a9, type: 3}
+  - {fileID: 704033521608001089}
+  - {fileID: 470826679049215369, guid: 8a7150bc797589a40abeaf78f6557a6d, type: 3}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  rightNeighbours:
+  - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
+  - {fileID: 8316447006658101203, guid: f8b6a902e70dd164fb7aab61541cb957, type: 3}
+  - {fileID: 704033521608001089}
+  - {fileID: 470826679049215369, guid: 8a7150bc797589a40abeaf78f6557a6d, type: 3}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 8043758897702043323, guid: 26ce3111118f4674cb641c142e6ae38d, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  downNeighbours:
+  - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
+  - {fileID: 704033521608001089}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  leftNeighbours:
+  - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
+  - {fileID: 8316447006658101203, guid: f8b6a902e70dd164fb7aab61541cb957, type: 3}
+  - {fileID: 8381501337213970966, guid: d422bee52c9bcfc4eb92f6eee59ae7a9, type: 3}
+  - {fileID: 704033521608001089}
+  - {fileID: 470826679049215369, guid: 8a7150bc797589a40abeaf78f6557a6d, type: 3}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
+  - {fileID: 8043758897702043323, guid: 26ce3111118f4674cb641c142e6ae38d, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   upBorder: 0
   rightBorder: 0
   leftBorder: 0

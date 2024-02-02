@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6611036910498269717}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.8860087, y: 0, z: -1.7911718}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -99,17 +99,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7667c1a22ac71c4f9adbab1ef051b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 0
+  probability: 1
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
-  upNeighbours: []
-  rightNeighbours: []
-  downNeighbours: []
-  leftNeighbours: []
-  upBorder: 0
+  rotateRight: 1
+  rotate180: 0
+  rotateLeft: 0
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
+  upNeighbours:
+  - {fileID: 1789412639435203070, guid: a58f7f1c11a5a13439338b67e999a1f4, type: 3}
+  - {fileID: 8043758897702043323}
+  - {fileID: 0}
+  - {fileID: 0}
+  rightNeighbours:
+  - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
+  - {fileID: 8316447006658101203, guid: f8b6a902e70dd164fb7aab61541cb957, type: 3}
+  - {fileID: 704033521608001089, guid: 32131458b3a639f42a062f17c5b62b79, type: 3}
+  - {fileID: 470826679049215369, guid: 8a7150bc797589a40abeaf78f6557a6d, type: 3}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 8043758897702043323}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  downNeighbours:
+  - {fileID: 1789412639435203070, guid: a58f7f1c11a5a13439338b67e999a1f4, type: 3}
+  - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
+  - {fileID: 8043758897702043323}
+  - {fileID: 0}
+  leftNeighbours:
+  - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
+  - {fileID: 8316447006658101203, guid: f8b6a902e70dd164fb7aab61541cb957, type: 3}
+  - {fileID: 8381501337213970966, guid: d422bee52c9bcfc4eb92f6eee59ae7a9, type: 3}
+  - {fileID: 704033521608001089, guid: 32131458b3a639f42a062f17c5b62b79, type: 3}
+  - {fileID: 470826679049215369, guid: 8a7150bc797589a40abeaf78f6557a6d, type: 3}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
+  - {fileID: 8043758897702043323}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  upBorder: 2
   rightBorder: 0
   leftBorder: 0
-  downBorder: 0
+  downBorder: 2
 --- !u!114 &6350885774959418864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +164,11 @@ MonoBehaviour:
   probability: 0
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
+  rotateRight: 0
+  rotate180: 0
+  rotateLeft: 0
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
   upNeighbours: []
   rightNeighbours: []
   downNeighbours: []

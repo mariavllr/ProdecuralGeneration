@@ -23,10 +23,10 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientIntensity: 0.28
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18081972, g: 0.2263527, b: 0.30719727, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 237783376}
   m_Layer: 0
   m_Name: Map Generator
-  m_TagString: Untagged
+  m_TagString: Hierba
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,22 +167,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9b8a28d23dba0458761dbffd81eb36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dimensions: 10
+  dimensions: 20
   tileObjects:
   - {fileID: 2121088719422835173, guid: 4c2b8e3a195fa864c965410edeb45d90, type: 3}
   - {fileID: 8316447006658101203, guid: f8b6a902e70dd164fb7aab61541cb957, type: 3}
   - {fileID: 8381501337213970966, guid: d422bee52c9bcfc4eb92f6eee59ae7a9, type: 3}
   - {fileID: 704033521608001089, guid: 32131458b3a639f42a062f17c5b62b79, type: 3}
-  extraObjects: []
-  extrasDensity: 0
+  - {fileID: 470826679049215369, guid: 8a7150bc797589a40abeaf78f6557a6d, type: 3}
+  - {fileID: 1877030866662023493, guid: cecbf8c2b55f3094c9c847a379635774, type: 3}
+  - {fileID: 635509065192762071, guid: 8710c122a906e4941a692e7797a24768, type: 3}
+  - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
+  - {fileID: 8043758897702043323, guid: 26ce3111118f4674cb641c142e6ae38d, type: 3}
+  extraObjects:
+  - {fileID: 919132149155446097, guid: 47839f0404e8e0a4788afaf24b8740f1, type: 3}
+  - {fileID: 919132149155446097, guid: 6f6836d840d9286499192ac15276bfcf, type: 3}
+  - {fileID: 919132149155446097, guid: 25ffe52c0483b5e4f86555110bc2579d, type: 3}
+  - {fileID: 919132149155446097, guid: 5c89b85ab34395e40af71cb1c784a242, type: 3}
+  - {fileID: 919132149155446097, guid: cf9bd3ab69cfc684eb8ed82e16964b85, type: 3}
+  - {fileID: 919132149155446097, guid: 53f66cf09ff706d4ea116718205291f0, type: 3}
+  - {fileID: 919132149155446097, guid: d84fdc674aada2b4ba99b51aa2610308, type: 3}
+  - {fileID: 919132149155446097, guid: 822720f82d85c114f91f2f89278aa59f, type: 3}
+  - {fileID: 919132149155446097, guid: 4415c1ff6280e7d43abb4a7e87a89b1c, type: 3}
+  - {fileID: 919132149155446097, guid: 5348c58753d923b43a3490ff6e95c9f8, type: 3}
+  - {fileID: 919132149155446097, guid: 50761f9a9f715024586ada37e4250498, type: 3}
+  - {fileID: 919132149155446097, guid: edac1d79b90aee145af355ef6d653a6a, type: 3}
+  - {fileID: 919132149155446097, guid: 1e48220f809669746968c01302a3c48a, type: 3}
+  - {fileID: 919132149155446097, guid: 8cc6706c2390ac04cb99dc15daced40f, type: 3}
+  - {fileID: 919132149155446097, guid: 06f0ed450ba83aa418a8eec96c303659, type: 3}
+  extrasDensity: 10
   gridComponents: []
   cellObj: {fileID: 8027346536580338537, guid: 1febbe864bd5f6b4692350fd6e9f7b1c, type: 3}
-  downPath: {fileID: 0}
-  leftRight: {fileID: 0}
-  leftDown: {fileID: 0}
-  rightDown: {fileID: 0}
-  downLeft: {fileID: 0}
-  downRight: {fileID: 0}
+  downPath: {fileID: 8316447006658101203, guid: f8b6a902e70dd164fb7aab61541cb957, type: 3}
+  curvePath: {fileID: 0}
 --- !u!1 &361444683
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +337,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 0}
+  m_BackGroundColor: {r: 0.30588236, g: 0.44313726, b: 0.5294118, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -346,7 +362,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8.3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -370,8 +386,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.36308154, y: -0.29922718, z: 0.124365464, w: 0.873595}
-  m_LocalPosition: {x: 10.360386, y: 9.228198, z: -1.9090341}
+  m_LocalRotation: {x: 0.21728685, y: 0.47156444, z: -0.12110858, w: 0.8460178}
+  m_LocalPosition: {x: -4.81, y: 10.580163, z: 0.63931805}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -405,18 +421,18 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.93155295, g: 0.9433962, b: 0.84994656, a: 1}
+  m_Intensity: 0.97
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
+    m_Strength: 0.426
+    m_Bias: 0.07
     m_NormalBias: 0.4
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
@@ -464,13 +480,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1106461420}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 5.636487, y: 1.4864218, z: 4.177679}
+  m_LocalRotation: {x: 0.4225125, y: 0.07126231, z: 0.10929555, w: 0.89691657}
+  m_LocalPosition: {x: 5.7, y: 4.03, z: 4.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 47.931, y: 19.186, z: 22.488}
 --- !u!1 &1570479291
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +771,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1986995077}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 237783376}
+        m_TargetAssemblyTypeName: WaveFunction3D, Assembly-CSharp
+        m_MethodName: Regenerate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1986995077
 MonoBehaviour:
   m_ObjectHideFlags: 0
