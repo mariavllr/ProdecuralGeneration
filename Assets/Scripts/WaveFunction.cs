@@ -11,7 +11,7 @@ public class WaveFunction : MonoBehaviour
 
     [Header("Map generation")]
     [SerializeField] private int dimensions;                      //The map is a square
-    [SerializeField] private Tile[] tileObjects;                  //All the map tiles that you can use
+    [SerializeField] private Tile2D[] tileObjects;                  //All the map tiles that you can use
     [SerializeField] private GameObject[] extraObjects;           //Houses, rocks, people...
 
     [Range(0f, 100f)]
@@ -24,12 +24,12 @@ public class WaveFunction : MonoBehaviour
 
     private bool generandoCamino = true;
         
-    [SerializeField] private Tile downPath,        
+    [SerializeField] private Tile2D downPath,        
         leftRight, leftDown, rightDown, downLeft, downRight;
 
     private int curX;
     private int curY;
-    private Tile tileToUse;
+    private Tile2D tileToUse;
     private bool forceDirectionChange = false;
 
     private bool continueLeft = false;
@@ -297,7 +297,7 @@ public class WaveFunction : MonoBehaviour
         tileToUse = leftRight;
     }
 
-    private void UpdateMap(int x, int y, Tile selectedTile)
+    private void UpdateMap(int x, int y, Tile2D selectedTile)
     {
         List<Cell> tempGrid = new List<Cell>(gridComponents);       
         Cell cellToCollapse = tempGrid[x + y * dimensions];
@@ -310,8 +310,8 @@ public class WaveFunction : MonoBehaviour
             return;
         }
 
-        cellToCollapse.tileOptions = new Tile[] { selectedTile };
-        Tile foundTile = cellToCollapse.tileOptions[0];
+        cellToCollapse.tileOptions = new Tile2D[] { selectedTile };
+        Tile2D foundTile = cellToCollapse.tileOptions[0];
 
         if (cellToCollapse.transform.childCount != 0)
         {
@@ -370,8 +370,8 @@ IEnumerator CheckEntropy()
         cellToCollapse.collapsed = true;
 
         //Elegir una tile para esa celda
-        List<(Tile tile, int weight)> weightedTiles = cellToCollapse.tileOptions.Select(tile => (tile, tile.probability)).ToList();
-        Tile selectedTile = ChooseTile(weightedTiles);
+        List<(Tile2D tile, int weight)> weightedTiles = cellToCollapse.tileOptions.Select(tile => (tile, tile.probability)).ToList();
+        Tile2D selectedTile = ChooseTile(weightedTiles);
 
         if (selectedTile == null)
         {
@@ -379,8 +379,8 @@ IEnumerator CheckEntropy()
             return;
         }        
 
-        cellToCollapse.tileOptions = new Tile[] { selectedTile };
-        Tile foundTile = cellToCollapse.tileOptions[0];
+        cellToCollapse.tileOptions = new Tile2D[] { selectedTile };
+        Tile2D foundTile = cellToCollapse.tileOptions[0];
 
         if(cellToCollapse.transform.childCount != 0)
         {
@@ -397,7 +397,7 @@ IEnumerator CheckEntropy()
         UpdateGeneration();
     }
 
-    void CheckExtras(Tile foundTile, Transform transform)
+    void CheckExtras(Tile2D foundTile, Transform transform)
     {
         if(foundTile.gameObject.CompareTag("Hierba"))
         {
@@ -416,7 +416,7 @@ IEnumerator CheckEntropy()
         }
     }
 
-    Tile ChooseTile(List<(Tile tile, int weight)> weightedTiles)
+    Tile2D ChooseTile(List<(Tile2D tile, int weight)> weightedTiles)
     {
         // Calculate the total weight
         int totalWeight = weightedTiles.Sum(item => item.weight);
@@ -461,8 +461,8 @@ IEnumerator CheckEntropy()
                 else if(ReviseTileOptions(x, y))
                 {
                     gridComponents[index].haSidoVisitado = true;
-                    List<Tile> options = new List<Tile>();
-                    foreach (Tile t in tileObjects)
+                    List<Tile2D> options = new List<Tile2D>();
+                    foreach (Tile2D t in tileObjects)
                     {
                         options.Add(t);                     
                     }
@@ -472,9 +472,9 @@ IEnumerator CheckEntropy()
                     if (y > 0)
                     {
                         //|| (y > 1 && gridComponents[x + (y - 2) * dimensions].collapsed)
-                        List<Tile> validOptions = new List<Tile>();
+                        List<Tile2D> validOptions = new List<Tile2D>();
 
-                            foreach (Tile possibleOptions in gridComponents[down].tileOptions)
+                            foreach (Tile2D possibleOptions in gridComponents[down].tileOptions)
                             {
                                 var valid = possibleOptions.upNeighbours;
                                 validOptions = validOptions.Concat(valid).ToList();
@@ -488,8 +488,8 @@ IEnumerator CheckEntropy()
                     if (x < dimensions - 1)
                     {
                         //|| ( x < dimensions - 2 && gridComponents[x + 2 + y * dimensions].collapsed)
-                        List<Tile> validOptions = new List<Tile>();
-                        foreach (Tile possibleOptions in gridComponents[right].tileOptions)
+                        List<Tile2D> validOptions = new List<Tile2D>();
+                        foreach (Tile2D possibleOptions in gridComponents[right].tileOptions)
                         {
                             var valid = possibleOptions.leftNeighbours;
                             validOptions = validOptions.Concat(valid).ToList();
@@ -506,9 +506,9 @@ IEnumerator CheckEntropy()
                         //|| (y < dimensions - 2 && gridComponents[x + (y + 2) * dimensions].collapsed)
 
 
-                        List<Tile> validOptions = new List<Tile>();
-
-                            foreach (Tile possibleOptions in gridComponents[up].tileOptions)
+                        List<Tile2D> validOptions = new List<Tile2D>();
+                        
+                            foreach (Tile2D possibleOptions in gridComponents[up].tileOptions)
                             {
 
 
@@ -527,9 +527,9 @@ IEnumerator CheckEntropy()
                         //|| (x > 1 && gridComponents[x - 2 + y * dimensions].collapsed)
 
 
-                        List<Tile> validOptions = new List<Tile>();
+                        List<Tile2D> validOptions = new List<Tile2D>();
 
-                            foreach (Tile possibleOptions in gridComponents[left].tileOptions)
+                            foreach (Tile2D possibleOptions in gridComponents[left].tileOptions)
                             {
 
                                 var valid = possibleOptions.rightNeighbours;
@@ -540,7 +540,7 @@ IEnumerator CheckEntropy()
 
                     }
 
-                    Tile[] newTileList = new Tile[options.Count];
+                    Tile2D[] newTileList = new Tile2D[options.Count];
 
                     for (int i = 0; i < options.Count; i++)
                     {
@@ -563,7 +563,7 @@ IEnumerator CheckEntropy()
         }
     }
 
-    void CheckValidity(List<Tile> optionList, List<Tile> validOption)
+    void CheckValidity(List<Tile2D> optionList, List<Tile2D> validOption)
     {
         for (int x = optionList.Count - 1; x >= 0; x--)
         {

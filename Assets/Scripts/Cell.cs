@@ -5,17 +5,17 @@ using UnityEngine;
 public class Cell : MonoBehaviour
 {
     public bool collapsed;
-    public Tile[] tileOptions;
+    public Tile2D[] tileOptions;
     public bool haSidoVisitado;
 
-    public void CreateCell(bool collapseState, Tile[] tiles)
+    public void CreateCell(bool collapseState, Tile2D[] tiles)
     {
         collapsed = collapseState;
         tileOptions = tiles;
         haSidoVisitado = false;
     }
 
-    public void RecreateCell(Tile[] tiles)
+    public void RecreateCell(Tile2D[] tiles)
     {
         tileOptions = tiles;
     }

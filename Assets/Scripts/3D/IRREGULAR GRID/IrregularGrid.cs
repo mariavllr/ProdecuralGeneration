@@ -12,6 +12,7 @@ public class IrregularGrid : MonoBehaviour
     Vector2[] points;
     Vector3[] triangles;
     int triangleIndex;
+    public Material quadMaterial; // Assign your quad material in the Inspector
 
     struct Vector2i
     {
@@ -83,13 +84,100 @@ public class IrregularGrid : MonoBehaviour
         if (point_index < point_count)
         {
             sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.position = points[point_index];
+            sphere.transform.position = points[point_index]; //new Vector3(point.x, 0, point.y)
             point_index++;
         }
         else
         {
             CancelInvoke("CreateSphere");
         }
+    }
+    MeshRenderer CreateTriangle(Vector2 a, Vector2 b, Vector2 c)
+    {
+        /*----------------FIRST CODE---------------------------
+         Mesh mesh = new Mesh();
+        mesh.vertices = ToVector3Array(new Vector2[] { vertex1, vertex2, vertex3 });
+
+        int[] trianglesIndex = new int[] { 0, 1, 2 };
+        // Asigna los índices al objeto Mesh
+        mesh.triangles = trianglesIndex;
+
+        // Crea un objeto GameObject y asigna el objeto Mesh
+        GameObject triangleObject = new GameObject("Triangle");
+        MeshFilter meshFilter = triangleObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = mesh;
+        mesh.RecalculateNormals();
+
+        // Añade un componente MeshRenderer
+        MeshRenderer meshRenderer = triangleObject.AddComponent<MeshRenderer>();
+
+        // Crea un material con renderizado de alambre (wireframe)
+        Material wireframeMaterial = new Material(Shader.Find("Standard"));
+        wireframeMaterial.SetFloat("_Mode", 1); // Establece el modo de renderizado de alambre
+        wireframeMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        wireframeMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        wireframeMaterial.SetInt("_ZWrite", 0);
+        wireframeMaterial.DisableKeyword("_ALPHATEST_ON");
+        wireframeMaterial.EnableKeyword("_ALPHABLEND_ON");
+        wireframeMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        wireframeMaterial.renderQueue = 3000; // Ajusta según sea necesario
+        wireframeMaterial.SetColor("_Color", Color.white); // Ajusta según sea necesario
+
+        // Asigna el material al MeshRenderer
+        meshRenderer.material = wireframeMaterial;*/
+
+
+        /* --------------GODOT CODE-------------------
+        MeshInstance CreateTriangle(Vector2 a, Vector2 b, Vector2 c){
+
+        var vertices = new Vector3[3] { new Vector3(a.x, 0, a.y), new Vector3(b.x, 0, b.y), new Vector3(c.x, 0, c.y) };
+        var arrays = new Godot.Collections.Array();
+        arrays.Resize((int)ArrayMesh.ArrayType.Max);
+        arrays[(int)ArrayMesh.ArrayType.Vertex] = vertices;
+
+        var array_mesh = new ArrayMesh();
+        array_mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.LineLoop, arrays);
+
+        var mesh_instance = new MeshInstance();
+        mesh_instance.Mesh = array_mesh;
+
+        AddChild(mesh_instance);
+        return mesh_instance;
+        }
+        */
+
+
+        //-----------------------------FINAL CODE-----------------------
+        // Convert Vector2 points to Vector3 with y=0
+        Vector3 pointA = new Vector3(a.x, 0, a.y);
+        Vector3 pointB = new Vector3(b.x, 0, b.y);
+        Vector3 pointC = new Vector3(c.x, 0, c.y);
+
+        // Create a new mesh
+        Mesh mesh = new Mesh();
+        mesh.vertices = new Vector3[] { pointA, pointB, pointC };
+        mesh.normals = new Vector3[] { Vector3.up, Vector3.up, Vector3.up }; // Set normals to face upwards
+        mesh.triangles = new int[] { 0, 1, 2 };
+
+        // Create a new GameObject
+        GameObject triangleObject = new GameObject("Triangle");
+        triangleObject.transform.position = Vector3.zero; // Adjust as needed
+
+        // Add MeshFilter and MeshRenderer components
+        MeshFilter meshFilter = triangleObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = mesh;
+
+        MeshRenderer meshRenderer = triangleObject.AddComponent<MeshRenderer>();
+
+        // Create a material (you may want to assign your own material)
+        Material material = new Material(Shader.Find("Standard"));
+        material.color = Color.white; // Set color as needed
+
+        // Assign the material to the MeshRenderer
+        meshRenderer.material = material;
+
+        return meshRenderer;
+
     }
 
     void StartCreatingTriangles()
@@ -120,40 +208,62 @@ public class IrregularGrid : MonoBehaviour
         }
     }
 
-    void CreateTriangle(Vector2 vertex1, Vector2 vertex2, Vector2 vertex3)
+
+    void CreateQuad(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
+        /* --------------GODOT CODE-------------------
+       void CreateQuad(Vector2 a, Vector2 b, Vector2 c, Vector2 d){
+
+       var vertices = new Vector3[4] { new Vector3(a.x, 0, a.y), new Vector3(b.x, 0, b.y), new Vector3(c.x, 0, c.y), new Vector3(d.x, 0, d.y) };
+       var arrays = new Godot.Collections.Array();
+       arrays.Resize((int)ArrayMesh.ArrayType.Max);
+       arrays[(int)ArrayMesh.ArrayType.Vertex] = vertices;
+
+       var array_mesh = new ArrayMesh();
+       array_mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.LineLoop, arrays);
+
+       var mesh_instance = new MeshInstance();
+       mesh_instance.Mesh = array_mesh;
+        mesh_instance.MaterialOverride = quad_material;
+
+       AddChild(mesh_instance);
+       }
+       */
+
+        // Convert Vector2 points to Vector3 with y=0
+        Vector3 pointA = new Vector3(a.x, 0, a.y);
+        Vector3 pointB = new Vector3(b.x, 0, b.y);
+        Vector3 pointC = new Vector3(c.x, 0, c.y);
+        Vector3 pointD = new Vector3(d.x, 0, d.y);
+
+        // Create a new mesh
         Mesh mesh = new Mesh();
-        mesh.vertices = ToVector3Array(new Vector2[] { vertex1, vertex2, vertex3 });
+        mesh.vertices = new Vector3[] { pointA, pointB, pointC, pointD };
+        mesh.normals = new Vector3[] { Vector3.up, Vector3.up, Vector3.up, Vector3.up }; // Set normals to face upwards
+        mesh.triangles = new int[] { 0, 1, 2, 3, 0 }; // Use a triangle fan to connect the vertices
 
-        int[] trianglesIndex = new int[] { 0, 1, 2 };
-        // Asigna los índices al objeto Mesh
-        mesh.triangles = trianglesIndex;
+        // Create a new GameObject
+        GameObject quadObject = new GameObject("Quad");
+        quadObject.transform.position = Vector3.zero; // Adjust as needed
 
-        // Crea un objeto GameObject y asigna el objeto Mesh
-        GameObject triangleObject = new GameObject("Triangle");
-        MeshFilter meshFilter = triangleObject.AddComponent<MeshFilter>();
+        // Add MeshFilter and MeshRenderer components
+        MeshFilter meshFilter = quadObject.AddComponent<MeshFilter>();
         meshFilter.mesh = mesh;
-        mesh.RecalculateNormals();
 
-        // Añade un componente MeshRenderer
-        MeshRenderer meshRenderer = triangleObject.AddComponent<MeshRenderer>();
+        MeshRenderer meshRenderer = quadObject.AddComponent<MeshRenderer>();
 
-        // Crea un material con renderizado de alambre (wireframe)
-        Material wireframeMaterial = new Material(Shader.Find("Standard"));
-        wireframeMaterial.SetFloat("_Mode", 1); // Establece el modo de renderizado de alambre
-        wireframeMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        wireframeMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        wireframeMaterial.SetInt("_ZWrite", 0);
-        wireframeMaterial.DisableKeyword("_ALPHATEST_ON");
-        wireframeMaterial.EnableKeyword("_ALPHABLEND_ON");
-        wireframeMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        wireframeMaterial.renderQueue = 3000; // Ajusta según sea necesario
-        wireframeMaterial.SetColor("_Color", Color.white); // Ajusta según sea necesario
+        // Assign the quad material
+        meshRenderer.material = quadMaterial;
 
-        // Asigna el material al MeshRenderer
-        meshRenderer.material = wireframeMaterial;
+        // Add a collider if needed (e.g., MeshCollider)
+        quadObject.AddComponent<MeshCollider>();
 
+        // You can also add other components or modify the object as needed
+
+        // Add the quadObject to the scene
+        quadObject.transform.SetParent(transform);
     }
+
 
     // Convierte un array de Vector2 a un array de Vector3 (añadiendo z=0)
     Vector3[] ToVector3Array(Vector2[] input)
