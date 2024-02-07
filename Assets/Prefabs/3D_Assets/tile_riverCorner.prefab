@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8657405321553718566}
   m_Layer: 0
   m_Name: tile_riverCorner
-  m_TagString: Untagged
+  m_TagString: RioCurva
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,6 @@ MonoBehaviour:
   rotation: {x: 0, y: 0, z: 0}
   scale: {x: 0, y: 0, z: 0}
   upNeighbours:
-  - {fileID: 1789412639435203070, guid: a58f7f1c11a5a13439338b67e999a1f4, type: 3}
   - {fileID: 8043758897702043323, guid: 26ce3111118f4674cb641c142e6ae38d, type: 3}
   - {fileID: 0}
   - {fileID: 0}
@@ -140,7 +139,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   leftNeighbours:
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

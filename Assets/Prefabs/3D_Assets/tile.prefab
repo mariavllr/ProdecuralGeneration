@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7667c1a22ac71c4f9adbab1ef051b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 50
+  probability: 80
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
   rotateRight: 0

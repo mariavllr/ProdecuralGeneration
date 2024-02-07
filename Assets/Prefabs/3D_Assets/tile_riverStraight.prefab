@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6350885774959418864}
   m_Layer: 0
   m_Name: tile_riverStraight
-  m_TagString: Untagged
+  m_TagString: RioRecto
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,7 +108,6 @@ MonoBehaviour:
   rotation: {x: 0, y: 0, z: 0}
   scale: {x: 0, y: 0, z: 0}
   upNeighbours:
-  - {fileID: 1789412639435203070, guid: a58f7f1c11a5a13439338b67e999a1f4, type: 3}
   - {fileID: 8043758897702043323}
   - {fileID: 0}
   - {fileID: 0}
@@ -127,7 +126,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   downNeighbours:
-  - {fileID: 1789412639435203070, guid: a58f7f1c11a5a13439338b67e999a1f4, type: 3}
   - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
   - {fileID: 8043758897702043323}
   - {fileID: 0}

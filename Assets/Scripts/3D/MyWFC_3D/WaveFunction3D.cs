@@ -17,17 +17,15 @@ public class WaveFunction3D : MonoBehaviour
 
     [Range(0f, 100f)]
     [SerializeField] private float extrasDensity;
+    [SerializeField] int maxCities;
+    [SerializeField] int maxNumeroAnillos;
 
     [SerializeField] private List<Cell3D> gridComponents;           //A list with all the cells inside the grid
     [SerializeField] private Cell3D cellObj;                        //They can be collapsed or not. Tiles are their children.
 
     [Header("Path generation")]
 
-    [SerializeField] private Tile3D downPath;
-    [SerializeField] private Tile3D curvePath;
-
-
-    private Tile3D leftRight, leftDown, rightDown, downLeft, downRight;
+    [SerializeField] private Tile3D leftRight, leftDown, rightDown, downLeft, downRight, downPath;
 
     private int curX;
     private int curY;
@@ -46,7 +44,6 @@ public class WaveFunction3D : MonoBehaviour
         UP
     };
     private CurrentDirection curDirection = CurrentDirection.DOWN;
-
 
     void Awake()
     {
@@ -86,6 +83,7 @@ public class WaveFunction3D : MonoBehaviour
                 //----------    ----------
                 string name = tile.gameObject.name + "_HorizontalSymetric";
                 GameObject newTile = new GameObject(name);
+                newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
                 newTile.SetActive(false);
                 newTile.hideFlags = HideFlags.HideInHierarchy;
 
@@ -145,6 +143,7 @@ public class WaveFunction3D : MonoBehaviour
             {
                 string name = tile.gameObject.name + "_RotateRight";
                 GameObject newTile = new GameObject(name);
+                newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
                 newTile.SetActive(false);
                 newTile.hideFlags = HideFlags.HideInHierarchy;
 
@@ -167,6 +166,7 @@ public class WaveFunction3D : MonoBehaviour
             {
                     string name = tile.gameObject.name + "_Rotate180";
                     GameObject newTile = new GameObject(name);
+                    newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
                     newTile.SetActive(false);
                     newTile.hideFlags = HideFlags.HideInHierarchy;
 
@@ -189,6 +189,7 @@ public class WaveFunction3D : MonoBehaviour
             {
                 string name = tile.gameObject.name + "_RotateLeft";
                 GameObject newTile = new GameObject(name);
+                newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
                 newTile.SetActive(false);
                 newTile.hideFlags = HideFlags.HideInHierarchy;
 
@@ -296,30 +297,70 @@ public class WaveFunction3D : MonoBehaviour
                 gridComponents.Add(newCell);
             }
         }
-        //StartCoroutine(GeneratePath());
-        generandoCamino = false;
-        StartCoroutine(CheckEntropy());
+        //Primero creamos un RIO
+        
+        StartCoroutine(GeneratePath("RioCurva", "RioRecto"));
+
+        //Luego creamos un CAMINO
+
+        //Y luego rellenamos
+       // generandoCamino = false;
+       // StartCoroutine(CheckEntropy());
     }
 
 
     //---------MAKE THE PATH---------
     //El camino siempre será de arriba a abajo.
-    IEnumerator GeneratePath()
+    IEnumerator GeneratePath(string tagCurva, string tagRecta)
     {
+        //Ajustar las tiles        
+        List<Tile3D> curves = new List<Tile3D>() ;
+        List<Tile3D> straights = new List<Tile3D>();
+
+        foreach (Tile3D t in tileObjects)
+        {
+            if (t.gameObject.tag == tagCurva) curves.Add(t);
+            else if (t.gameObject.tag == tagRecta) straights.Add(t);
+        }
+
+        //Curvas
+        foreach (Tile3D curveTile in curves)
+        {
+            if ((curveTile.upBorder == Tile3D.Border.PATH && curveTile.leftBorder == Tile3D.Border.PATH) || (curveTile.upBorder == Tile3D.Border.WATER && curveTile.leftBorder == Tile3D.Border.WATER))
+            {
+                rightDown = curveTile;
+            }
+            else if ((curveTile.upBorder == Tile3D.Border.PATH && curveTile.rightBorder == Tile3D.Border.PATH) || (curveTile.upBorder == Tile3D.Border.WATER && curveTile.rightBorder == Tile3D.Border.WATER))
+            {
+                leftDown = curveTile;
+            }
+            else if ((curveTile.rightBorder == Tile3D.Border.PATH && curveTile.downBorder == Tile3D.Border.PATH) || (curveTile.rightBorder == Tile3D.Border.WATER && curveTile.downBorder == Tile3D.Border.WATER))
+            {
+                downRight = curveTile;
+            }
+            else if ((curveTile.downBorder == Tile3D.Border.PATH && curveTile.leftBorder == Tile3D.Border.PATH) || (curveTile.downBorder == Tile3D.Border.WATER && curveTile.leftBorder == Tile3D.Border.WATER))
+            {
+                downLeft = curveTile;
+            }
+        }
+
+        //Recto        
+        foreach (Tile3D straightTile in straights)
+        {
+            if ((straightTile.upBorder == Tile3D.Border.PATH && straightTile.downBorder == Tile3D.Border.PATH) || (straightTile.upBorder == Tile3D.Border.WATER && straightTile.downBorder == Tile3D.Border.WATER))
+            {
+                downPath = straightTile;
+            }
+            else if ((straightTile.leftBorder == Tile3D.Border.PATH && straightTile.rightBorder == Tile3D.Border.PATH) || (straightTile.leftBorder == Tile3D.Border.WATER && straightTile.rightBorder == Tile3D.Border.WATER))
+            {
+                leftRight = straightTile;
+            }
+        }
+
         curX = UnityEngine.Random.Range(0, dimensions);
         curY = 0;
 
         tileToUse = downPath;
-
-
-        //Ajustar las tiles
-
-        //Curvas
-        if(curvePath.upBorder == Tile3D.Border.PATH && curvePath.leftBorder == Tile3D.Border.PATH)
-        {
-
-        }
-
 
         while (curY <= dimensions - 1)
         {
@@ -340,6 +381,12 @@ public class WaveFunction3D : MonoBehaviour
         }
 
         print("FIN CAMINO");
+        /*if (generandoCamino)
+        {
+            generandoCamino = false;
+            StartCoroutine(GeneratePath("Curva", "Recto"));
+        }*/
+
         generandoCamino = false;
         UpdateGeneration();
     }
@@ -565,9 +612,13 @@ public class WaveFunction3D : MonoBehaviour
             }
         }
 
-        Instantiate(foundTile, cellToCollapse.transform.position, Quaternion.identity, cellToCollapse.transform);
+        Tile3D instantiatedTile = Instantiate(foundTile, cellToCollapse.transform.position, Quaternion.identity, cellToCollapse.transform);
+        if (instantiatedTile.rotation != Vector3.zero)
+        {
+            instantiatedTile.gameObject.transform.Rotate(foundTile.rotation, Space.Self);
+        }
+        instantiatedTile.gameObject.SetActive(true);
         iterations++;
-        print(iterations);
     }
 
 
@@ -643,7 +694,7 @@ IEnumerator CheckEntropy()
 
         instantiatedTile.gameObject.SetActive(true);
 
-        CheckExtras(foundTile, cellToCollapse.transform);
+       // CheckExtras(foundTile, cellToCollapse.transform);
 
         UpdateGeneration();
     }
@@ -807,9 +858,107 @@ IEnumerator CheckEntropy()
         gridComponents = newGenerationCell;
 
         iterations++;
-        if (iterations < dimensions * dimensions)
+        if (iterations <= dimensions * dimensions)
         {
             if(!generandoCamino) StartCoroutine(CheckEntropy());
+        }
+
+        else
+        {
+            //Ha terminado de generar el terreno
+            GenerateCities();
+        }
+    }
+
+    void GenerateCities()
+    {
+        int citiesNum = UnityEngine.Random.Range(2, maxCities + 1); //Numero random de ciudades en un rango dado
+        bool encontrado;
+        int indice = citiesNum;
+
+        for(int c = 0; c < indice; c++)
+        {
+            //centro ciudad random
+            int x = UnityEngine.Random.Range(0, dimensions);
+            int y = UnityEngine.Random.Range(0, dimensions);
+            var index = x + y * dimensions;
+
+            encontrado = false;
+            while (!encontrado)
+            {
+                if (gridComponents[index].tileOptions[0].CompareTag("Hierba") && !gridComponents[index].tieneCiudad)
+                {
+                    encontrado = true;
+                }
+                else
+                {
+                    x = UnityEngine.Random.Range(0, dimensions);
+                    y = UnityEngine.Random.Range(0, dimensions);
+                    index = x + y * dimensions;
+                }
+            }
+
+            if (citiesNum < 0) return;
+
+                    //Anillos
+
+                    int maxRings = UnityEngine.Random.Range(1, maxNumeroAnillos); //Numero random de anillos que puede tener una ciudad
+
+                    int ring = 0;
+                    int celdasVisitadas = -1;
+                    int n = 4;
+                    int i;
+                    (int, int) indexCell;
+
+                    Queue<(int, int)> celdasVisitarAnillos = new Queue<(int, int)>();
+
+                    celdasVisitarAnillos.Enqueue((x, y));
+
+                    while (celdasVisitarAnillos.Count != 0 && ring < maxRings)
+                    {
+                        indexCell = celdasVisitarAnillos.Dequeue();
+                        i = (indexCell.Item1) + (indexCell.Item2) * dimensions;
+                        celdasVisitadas++;
+
+                        if (celdasVisitadas == n)
+                        {
+                            ring++;
+                            n = n * 2;
+                        }
+
+                        if (!gridComponents[i].tieneCiudad)
+                        {
+                            int r = UnityEngine.Random.Range(0, extraObjects.Length);
+                            if (gridComponents[i].tileOptions[0].CompareTag("Hierba"))
+                            {
+                                Instantiate(extraObjects[r], gridComponents[i].gameObject.transform.position, Quaternion.identity, gridComponents[i].gameObject.transform);
+                                gridComponents[i].tieneCiudad = true;
+                            }
+                            //Si tiene a alguien a la derecha
+                            if (indexCell.Item1 != dimensions - 1)
+                            {
+                                celdasVisitarAnillos.Enqueue((indexCell.Item1 + 1, indexCell.Item2));
+                            }
+                            //Si no tiene a nadie debajo
+                            if (indexCell.Item2 != 0)
+                            {
+                                celdasVisitarAnillos.Enqueue((indexCell.Item1, indexCell.Item2 - 1));
+                            }
+                            //Si no tiene a nadie a la izquierda
+                            if (indexCell.Item1 != 0)
+                            {
+                                celdasVisitarAnillos.Enqueue((indexCell.Item1 - 1, indexCell.Item2));
+                            }
+                            //Si no tiene a nadie arriba
+                            if (indexCell.Item2 != dimensions - 1)
+                            {
+                                celdasVisitarAnillos.Enqueue((indexCell.Item1, indexCell.Item2 + 1));
+                            }
+                        }
+                    }
+
+                    citiesNum--;
+
         }
     }
 
@@ -825,7 +974,7 @@ IEnumerator CheckEntropy()
         }
     }
 
-    bool ReviseTileOptions(int x, int y)
+    bool ReviseTileOptions(int x, int y) //Optimizacion, que solo compruebe lo necesario, no todo el mapa todo el rato
     {
         //Comprueba los OCHO vecinos. Si tiene alguno colapsado, revisar sus tiles.
         int up, down, left, right, rightUp, rightDown, leftUp, leftDown;

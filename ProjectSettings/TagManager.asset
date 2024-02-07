@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Hierba
+  - Curva
+  - Recto
+  - RioCurva
+  - RioRecto
   layers:
   - Default
   - TransparentFX
