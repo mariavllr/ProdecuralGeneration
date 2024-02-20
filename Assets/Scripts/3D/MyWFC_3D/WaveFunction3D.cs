@@ -8,55 +8,54 @@ using UnityEditor;
 
 public class WaveFunction3D : MonoBehaviour
 {
-    int iterations = 0;
+    public int iterations = 0;
 
     [Header("Map generation")]
-    [SerializeField] private int dimensions;                      //The map is a square
-    [SerializeField] private Tile3D[] tileObjects;                  //All the map tiles that you can use
+    [SerializeField] public int dimensions;                      //The map is a square
+    [SerializeField] public Tile3D[] tileObjects;                  //All the map tiles that you can use
     [SerializeField] private GameObject[] extraObjects;           //Houses, rocks, people...
 
+    [Header("Paths")]
+    [SerializeField] private int numberOfRivers;
+    [SerializeField] private int numberOfPaths;
+
+    [Header("Cities")]
     [Range(0f, 100f)]
     [SerializeField] private float extrasDensity;
     [SerializeField] int maxCities;
     [SerializeField] int maxNumeroAnillos;
 
-    [SerializeField] private List<Cell3D> gridComponents;           //A list with all the cells inside the grid
+    [Header("Grid")]
+    [SerializeField] public List<Cell3D> gridComponents;           //A list with all the cells inside the grid
     [SerializeField] private Cell3D cellObj;                        //They can be collapsed or not. Tiles are their children.
 
-    [Header("Path generation")]
+    //Events
+    public delegate void OnRegenerate();
+    public static event OnRegenerate onRegenerate;
 
-    [SerializeField] private Tile3D leftRight, leftDown, rightDown, downLeft, downRight, downPath;
-
-    private int curX;
-    private int curY;
-    private Tile3D tileToUse;
-    private bool forceDirectionChange = false;
-
-    private bool continueLeft = false;
-    private bool continueRight = false;
-    private int currentCount = 0;               //Each 3 equal iterations it is forced to change direction
-    private bool generandoCamino = true;
-    private enum CurrentDirection
+    private void OnEnable()
     {
-        LEFT,
-        RIGHT,
-        DOWN,
-        UP
-    };
-    private CurrentDirection curDirection = CurrentDirection.DOWN;
+        PathGenerator.onPathEnd += FinCamino;
+    }
+
+    private void OnDisable()
+    {
+        PathGenerator.onPathEnd -= FinCamino;
+    }
 
     void Awake()
     {
-        ClearNeighbours();
-        CreateRemainingCells();
-        DefineNeighbourTiles();
+        ClearNeighbours(ref tileObjects);
+        CreateRemainingCells(ref tileObjects);
+        DefineNeighbourTiles(ref tileObjects, ref tileObjects);
+
         gridComponents = new List<Cell3D>();
         InitializeGrid();
     }
 
-    void ClearNeighbours()
+    public void ClearNeighbours(ref Tile3D[] tileArray)
     {
-        foreach(Tile3D tile in tileObjects)
+        foreach(Tile3D tile in tileArray)
         {
             tile.upNeighbours.Clear();
             tile.rightNeighbours.Clear();
@@ -66,12 +65,30 @@ public class WaveFunction3D : MonoBehaviour
     }
 
 
-
-    //---------------Look if we have to create more tiles-------------------
-    void CreateRemainingCells()
+    Tile3D CreateNewTileVariation(Tile3D tile, string nameVariation)
     {
+        string name = tile.gameObject.name + nameVariation;
+        GameObject newTile = new GameObject(name);
+        newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
+        newTile.SetActive(false);
+        newTile.hideFlags = HideFlags.HideInHierarchy;
+
+        MeshFilter meshFilter = newTile.AddComponent<MeshFilter>();
+        meshFilter.sharedMesh = tile.gameObject.GetComponent<MeshFilter>().sharedMesh;
+        MeshRenderer meshRenderer = newTile.AddComponent<MeshRenderer>();
+        meshRenderer.sharedMaterials = tile.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
+
+        Tile3D tileRotated = newTile.AddComponent<Tile3D>();
+        tileRotated.probability = tile.probability;
+
+        return tileRotated;
+    }
+    //---------------Look if we have to create more tiles-------------------
+    public void CreateRemainingCells(ref Tile3D[] tileArray)
+    {
+        //print("llamado con tile de length: " + tileArray.Length);
         List<Tile3D> newTiles = new List<Tile3D>();
-        foreach (Tile3D tile in tileObjects)
+        foreach (Tile3D tile in tileArray)
         {
             //tile._transform = tile.gameObject.transform;
             if (tile.isHorizontalSymetric)
@@ -141,69 +158,25 @@ public class WaveFunction3D : MonoBehaviour
 
             if (tile.rotateRight) //Por defecto, sentido horario
             {
-                string name = tile.gameObject.name + "_RotateRight";
-                GameObject newTile = new GameObject(name);
-                newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
-                newTile.SetActive(false);
-                newTile.hideFlags = HideFlags.HideInHierarchy;
-
-                MeshFilter meshFilter = newTile.AddComponent<MeshFilter>();
-                meshFilter.sharedMesh = tile.gameObject.GetComponent<MeshFilter>().sharedMesh;
-                MeshRenderer meshRenderer = newTile.AddComponent<MeshRenderer>();
-                meshRenderer.sharedMaterials = tile.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
-
-                Tile3D tileRotated = newTile.AddComponent<Tile3D>();
-                tileRotated.probability = tile.probability;
-
+                Tile3D tileRotated = CreateNewTileVariation(tile, "_RotateRight");
                 RotateBorders90(tile, tileRotated);
 
-                //tileRotated._transform.Rotate(0f, 90f, 0f, Space.Self);
                 tileRotated.rotation = new Vector3(0f, 90f, 0f);
                 newTiles.Add(tileRotated);
             }
 
             if (tile.rotate180)
             {
-                    string name = tile.gameObject.name + "_Rotate180";
-                    GameObject newTile = new GameObject(name);
-                    newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
-                    newTile.SetActive(false);
-                    newTile.hideFlags = HideFlags.HideInHierarchy;
-
-                    MeshFilter meshFilter = newTile.AddComponent<MeshFilter>();
-                    meshFilter.sharedMesh = tile.gameObject.GetComponent<MeshFilter>().sharedMesh;
-                    MeshRenderer meshRenderer = newTile.AddComponent<MeshRenderer>();
-                    meshRenderer.sharedMaterials = tile.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
-
-                    Tile3D tileRotated = newTile.AddComponent<Tile3D>();
-                    tileRotated.probability = tile.probability;
-
-                    RotateBorders180(tile, tileRotated);
-                //tileRotated._transform = tile._transform;
-                //tileRotated._transform.Rotate(0f, 180f, 0f, Space.Self);
+                Tile3D tileRotated = CreateNewTileVariation(tile, "_Rotate180");
+                RotateBorders180(tile, tileRotated);
                 tileRotated.rotation = new Vector3(0f, 180f, 0f);
                 newTiles.Add(tileRotated);
             }
 
             if (tile.rotateLeft)
             {
-                string name = tile.gameObject.name + "_RotateLeft";
-                GameObject newTile = new GameObject(name);
-                newTile.gameObject.tag = tile.gameObject.tag; //comprobar si tag puede ser nulo
-                newTile.SetActive(false);
-                newTile.hideFlags = HideFlags.HideInHierarchy;
-
-                MeshFilter meshFilter = newTile.AddComponent<MeshFilter>();
-                meshFilter.sharedMesh = tile.gameObject.GetComponent<MeshFilter>().sharedMesh;
-                MeshRenderer meshRenderer = newTile.AddComponent<MeshRenderer>();
-                meshRenderer.sharedMaterials = tile.gameObject.GetComponent<MeshRenderer>().sharedMaterials;
-
-                Tile3D tileRotated = newTile.AddComponent<Tile3D>();
-                tileRotated.probability = tile.probability;
-
+                Tile3D tileRotated = CreateNewTileVariation(tile, "_RotateLeft");
                 RotateBorders270(tile, tileRotated);
-                // tileRotated._transform = tile._transform;
-                // tileRotated._transform.Rotate(0f, 270f, 0f, Space.Self);
                 tileRotated.rotation = new Vector3(0f, 270f, 0f);
                 newTiles.Add(tileRotated);
             }
@@ -211,8 +184,8 @@ public class WaveFunction3D : MonoBehaviour
 
         if(newTiles.Count != 0)
         {
-            Tile3D[] aux = tileObjects.Concat(newTiles.ToArray()).ToArray();
-            tileObjects = aux;
+            Tile3D[] aux = tileArray.Concat(newTiles.ToArray()).ToArray();
+            tileArray = aux;
         }
     }
 
@@ -254,11 +227,11 @@ public class WaveFunction3D : MonoBehaviour
 
 
     //Define the neighbours
-    void DefineNeighbourTiles()
+    public void DefineNeighbourTiles(ref Tile3D[] tileArray, ref Tile3D[] otherTileArray)
     {
-        foreach(Tile3D tile in tileObjects)
+        foreach(Tile3D tile in tileArray)
         {
-            foreach (Tile3D otherTile in tileObjects)
+            foreach (Tile3D otherTile in otherTileArray)
             {
                 //Vecinos de arriba, los que coincidan en el borde de abajo
                 if (otherTile.downBorder == tile.upBorder)
@@ -297,328 +270,29 @@ public class WaveFunction3D : MonoBehaviour
                 gridComponents.Add(newCell);
             }
         }
-        //Primero creamos un RIO
-        
-        StartCoroutine(GeneratePath("RioCurva", "RioRecto"));
 
-        //Luego creamos un CAMINO
-
-        //Y luego rellenamos
-       // generandoCamino = false;
-       // StartCoroutine(CheckEntropy());
+        StartCoroutine(GeneratePaths());
     }
 
-
-    //---------MAKE THE PATH---------
-    //El camino siempre será de arriba a abajo.
-    IEnumerator GeneratePath(string tagCurva, string tagRecta)
+    IEnumerator GeneratePaths()
     {
-        //Ajustar las tiles        
-        List<Tile3D> curves = new List<Tile3D>() ;
-        List<Tile3D> straights = new List<Tile3D>();
-
-        foreach (Tile3D t in tileObjects)
+        for(int i = 0; i < numberOfRivers; i++)
         {
-            if (t.gameObject.tag == tagCurva) curves.Add(t);
-            else if (t.gameObject.tag == tagRecta) straights.Add(t);
+            yield return StartCoroutine(GetComponent<PathGenerator>().GeneratePath("RioCurva", "RioRecto"));
+            
         }
 
-        //Curvas
-        foreach (Tile3D curveTile in curves)
+        for (int i = 0; i < numberOfPaths; i++)
         {
-            if ((curveTile.upBorder == Tile3D.Border.PATH && curveTile.leftBorder == Tile3D.Border.PATH) || (curveTile.upBorder == Tile3D.Border.WATER && curveTile.leftBorder == Tile3D.Border.WATER))
-            {
-                rightDown = curveTile;
-            }
-            else if ((curveTile.upBorder == Tile3D.Border.PATH && curveTile.rightBorder == Tile3D.Border.PATH) || (curveTile.upBorder == Tile3D.Border.WATER && curveTile.rightBorder == Tile3D.Border.WATER))
-            {
-                leftDown = curveTile;
-            }
-            else if ((curveTile.rightBorder == Tile3D.Border.PATH && curveTile.downBorder == Tile3D.Border.PATH) || (curveTile.rightBorder == Tile3D.Border.WATER && curveTile.downBorder == Tile3D.Border.WATER))
-            {
-                downRight = curveTile;
-            }
-            else if ((curveTile.downBorder == Tile3D.Border.PATH && curveTile.leftBorder == Tile3D.Border.PATH) || (curveTile.downBorder == Tile3D.Border.WATER && curveTile.leftBorder == Tile3D.Border.WATER))
-            {
-                downLeft = curveTile;
-            }
+            yield return StartCoroutine(GetComponent<PathGenerator>().GeneratePath("Curva", "Recto"));
+
         }
-
-        //Recto        
-        foreach (Tile3D straightTile in straights)
-        {
-            if ((straightTile.upBorder == Tile3D.Border.PATH && straightTile.downBorder == Tile3D.Border.PATH) || (straightTile.upBorder == Tile3D.Border.WATER && straightTile.downBorder == Tile3D.Border.WATER))
-            {
-                downPath = straightTile;
-            }
-            else if ((straightTile.leftBorder == Tile3D.Border.PATH && straightTile.rightBorder == Tile3D.Border.PATH) || (straightTile.leftBorder == Tile3D.Border.WATER && straightTile.rightBorder == Tile3D.Border.WATER))
-            {
-                leftRight = straightTile;
-            }
-        }
-
-        curX = UnityEngine.Random.Range(0, dimensions);
-        curY = 0;
-
-        tileToUse = downPath;
-
-        while (curY <= dimensions - 1)
-        {
-            CheckCurrentDirections();
-            ChooseDirection();
-
-            if (curY <= dimensions - 1)
-            {
-                UpdateMap(curX, curY, tileToUse);
-            }
-
-            if (curDirection == CurrentDirection.DOWN)
-            {
-                curY++;
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        print("FIN CAMINO");
-        /*if (generandoCamino)
-        {
-            generandoCamino = false;
-            StartCoroutine(GeneratePath("Curva", "Recto"));
-        }*/
-
-        generandoCamino = false;
         UpdateGeneration();
     }
 
-    private void CheckCurrentDirections()
+    void FinCamino()
     {
-        //Cell left = gridComponents[curX - 1 + curY * dimensions];
-       // Cell right = gridComponents[curX + 1 + curY * dimensions];
-       // Cell down = gridComponents[curX + (curY + 1) * dimensions];
-       // Cell up = gridComponents[curX + (curY - 1) * dimensions];
 
-       // Cell upLeftCorner = gridComponents[curX - 1 + (curY - 1) * dimensions];
-       // Cell upRightCorner = gridComponents[curX + 1 + (curY - 1) * dimensions];
-
-        if (curDirection == CurrentDirection.LEFT && curX - 1 >= 0 && !gridComponents[curX - 1 + curY * dimensions].collapsed)
-        {
-            //Si la direccion es izquierda, la posición a la izquierda no se sale del mapa y la celda está vacía
-            //Ir a la izquierda
-            curX--;
-        }
-        else if (curDirection == CurrentDirection.RIGHT && curX + 1 <= dimensions - 1 && !gridComponents[curX + 1 + curY * dimensions].collapsed)
-        {
-            //Si la direccion es derecha, la posición a la derecha no se sale del mapa y la celda está vacía
-            //Ir a la derecha
-            curX++;
-        }
-        else if (curDirection == CurrentDirection.UP && curY - 1 >= 0 && !gridComponents[curX + (curY - 1) * dimensions].collapsed)
-        {
-            //Si la direccion es arriba, la posición arriba no se sale del mapa y la celda está vacía
-            if (continueLeft && !gridComponents[curX - 1 + (curY - 1) * dimensions].collapsed ||
-            continueRight && !gridComponents[curX + 1 + (curY - 1) * dimensions].collapsed)
-            {
-                //Si la esquina superior izquierda y derecha esta vacía
-                curY--;
-            }
-            else
-            {
-                forceDirectionChange = true;
-
-            }
-        }
-        else if (curDirection != CurrentDirection.DOWN)
-        {
-            forceDirectionChange = true;
-        }
-    }
-
-    private void ChooseDirection()
-    {
-        if (currentCount < 3 && !forceDirectionChange)
-        {
-            currentCount++;
-        }
-        else
-        {
-            bool chanceToChange = Mathf.FloorToInt(UnityEngine.Random.value * 1.99f) == 0;
-
-            if (chanceToChange || forceDirectionChange || currentCount > 7)
-            {
-                currentCount = 0;
-                forceDirectionChange = false;
-                ChangeDirection();
-            }
-
-            currentCount++;
-        }
-    }
-
-    private void ChangeDirection()
-    {
-        
-        //Cell down = gridComponents[curX + (curY + 1) * dimensions];
-
-        int dirValue = Mathf.FloorToInt(UnityEngine.Random.value * 2.99f);
-
-        if (dirValue == 0 && curDirection == CurrentDirection.LEFT && curX - 1 > 0
-        || dirValue == 0 && curDirection == CurrentDirection.RIGHT && curX + 1 < dimensions - 1)
-        {
-            if (curY - 1 >= 0)
-            {
-                Cell3D up = gridComponents[curX + (curY - 1) * dimensions];
-                Cell3D upLeftCorner = gridComponents[curX - 1 + (curY - 1) * dimensions];
-                Cell3D upRightCorner = gridComponents[curX + 1 + (curY - 1) * dimensions];
-                if (!up.collapsed &&
-                !upRightCorner.collapsed &&
-                !upLeftCorner.collapsed)
-                {
-                    GoUp();
-                    return;
-                }
-            }
-        }
-
-        if (curDirection == CurrentDirection.LEFT)
-        {
-            UpdateMap(curX, curY, leftDown);
-        }
-        else if (curDirection == CurrentDirection.RIGHT)
-        {
-            UpdateMap(curX, curY, rightDown);
-        }
-
-        if (curDirection == CurrentDirection.LEFT || curDirection == CurrentDirection.RIGHT)
-        {
-            curY++;
-            tileToUse = downPath;
-            curDirection = CurrentDirection.DOWN;
-            return;
-        }
-
-        if (curX - 1 > 0 && curX + 1 < dimensions - 1 || continueLeft || continueRight)
-        {
-            if (dirValue == 1 && !continueRight || continueLeft)
-            {
-                Cell3D left = gridComponents[curX - 1 + curY * dimensions];
-
-                if (!left.collapsed)
-                {
-                    if (continueLeft)
-                    {
-                        tileToUse = rightDown;
-                        continueLeft = false;
-                    }
-                    else
-                    {
-                        tileToUse = downLeft;
-                    }
-                    curDirection = CurrentDirection.LEFT;
-                }
-            }
-            else
-            {
-                Cell3D right = gridComponents[curX + 1 + curY * dimensions];
-                if (!right.collapsed)
-                {
-                    if (continueRight)
-                    {
-                        continueRight = false;
-                        tileToUse = leftDown;
-                    }
-                    else
-                    {
-                        tileToUse = downRight;
-                    }
-                    curDirection = CurrentDirection.RIGHT;
-                }
-            }
-        }
-        else if (curX - 1 > 0)
-        {
-            tileToUse = downLeft;
-            curDirection = CurrentDirection.LEFT;
-        }
-        else if (curX + 1 < dimensions - 1)
-        {
-            tileToUse = downRight;
-            curDirection = CurrentDirection.RIGHT;
-        }
-
-        if (curDirection == CurrentDirection.LEFT)
-        {
-            GoLeft();
-        }
-        else if (curDirection == CurrentDirection.RIGHT)
-        {
-            GoRight();
-        }
-    }
-
-    private void GoUp()
-    {
-        if (curDirection == CurrentDirection.LEFT)
-        {
-            UpdateMap(curX, curY, downRight);
-            continueLeft = true;
-        }
-        else
-        {
-            UpdateMap(curX, curY, downLeft);
-            continueRight = true;
-        }
-        curDirection = CurrentDirection.UP;
-        curY--;
-        tileToUse = downPath;
-    }
-
-    private void GoLeft()
-    {
-        UpdateMap(curX, curY, tileToUse);
-        curX--;
-        tileToUse = leftRight;
-    }
-
-    private void GoRight()
-    {
-        UpdateMap(curX, curY, tileToUse);
-        curX++;
-        tileToUse = leftRight;
-    }
-
-    private void UpdateMap(int x, int y, Tile3D selectedTile)
-    {
-        List<Cell3D> tempGrid = new List<Cell3D>(gridComponents);       
-        Cell3D cellToCollapse = tempGrid[x + y * dimensions];
-        cellToCollapse.collapsed = true;
-
-
-        if (selectedTile == null)
-        {
-            Debug.Log("que??");
-            return;
-        }
-
-        cellToCollapse.tileOptions = new Tile3D[] { selectedTile };
-        Tile3D foundTile = cellToCollapse.tileOptions[0];
-
-        if (cellToCollapse.transform.childCount != 0)
-        {
-            foreach (Transform child in cellToCollapse.transform)
-            {
-                Destroy(child.gameObject);
-                iterations--;
-            }
-        }
-
-        Tile3D instantiatedTile = Instantiate(foundTile, cellToCollapse.transform.position, Quaternion.identity, cellToCollapse.transform);
-        if (instantiatedTile.rotation != Vector3.zero)
-        {
-            instantiatedTile.gameObject.transform.Rotate(foundTile.rotation, Space.Self);
-        }
-        instantiatedTile.gameObject.SetActive(true);
-        iterations++;
     }
 
 
@@ -670,6 +344,7 @@ IEnumerator CheckEntropy()
         if (selectedTile == null)
         {
             Debug.LogError("INCOMPATIBILITY!");
+            Regenerate();
             return;
         }        
 
@@ -860,7 +535,7 @@ IEnumerator CheckEntropy()
         iterations++;
         if (iterations <= dimensions * dimensions)
         {
-            if(!generandoCamino) StartCoroutine(CheckEntropy());
+            StartCoroutine(CheckEntropy());
         }
 
         else
@@ -1081,6 +756,11 @@ IEnumerator CheckEntropy()
     //TO DO: Que se active solo cuando no se esté generando un mapa
     public void Regenerate()
     {
+        if(onRegenerate != null)
+        {
+            onRegenerate();
+        }
+        StopAllCoroutines();
         //Borrar todas las celdas
         for (int i = gameObject.transform.childCount-1; i>=0; i--)
         {

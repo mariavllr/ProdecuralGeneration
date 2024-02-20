@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1789412639435203070}
   m_Layer: 0
   m_Name: tile_riverBridge
-  m_TagString: Untagged
+  m_TagString: Cross
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,10 +107,28 @@ MonoBehaviour:
   rotateLeft: 0
   rotation: {x: 0, y: 0, z: 0}
   scale: {x: 0, y: 0, z: 0}
-  upNeighbours: []
-  rightNeighbours: []
-  downNeighbours: []
-  leftNeighbours: []
+  upNeighbours:
+  - {fileID: 8043758897702043323, guid: 26ce3111118f4674cb641c142e6ae38d, type: 3}
+  - {fileID: 1789412639435203070}
+  - {fileID: 0}
+  - {fileID: 0}
+  rightNeighbours:
+  - {fileID: 8381501337213970966, guid: d422bee52c9bcfc4eb92f6eee59ae7a9, type: 3}
+  - {fileID: 1789412639435203070}
+  - {fileID: 1097088910824377137, guid: d2a1a5494d36faf41b4923844ef2918f, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  downNeighbours:
+  - {fileID: 8657405321553718566, guid: ae019989a9c96ca49ad0d8bc28f6c893, type: 3}
+  - {fileID: 8043758897702043323, guid: 26ce3111118f4674cb641c142e6ae38d, type: 3}
+  - {fileID: 1789412639435203070}
+  - {fileID: 0}
+  leftNeighbours:
+  - {fileID: 1789412639435203070}
+  - {fileID: 1097088910824377137, guid: d2a1a5494d36faf41b4923844ef2918f, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   upBorder: 2
   rightBorder: 1
   leftBorder: 1
