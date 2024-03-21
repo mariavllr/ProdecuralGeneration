@@ -47,4 +47,4 @@ MonoBehaviour:
   collapsed: 0
   tileOptions: []
   haSidoVisitado: 0
-  tieneCiudad: 0
+  tieneObstaculo: 0

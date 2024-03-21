@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7010407225523901650}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.838772, y: 0, z: 10.549389}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -64,8 +64,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7575915981058242857, guid: 3cbab78de3ece37499cc061a1c4380f2, type: 3}
-  - {fileID: -2505642851634945670, guid: 3cbab78de3ece37499cc061a1c4380f2, type: 3}
+  - {fileID: 7575915981058242857, guid: 94a2265fe56d1e44bba5298dffd6687f, type: 3}
+  - {fileID: -2505642851634945670, guid: 4f2278b35729df840a67197511f7224b, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -126,7 +126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad286de352d6df4fa85d8db546ba686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 1
+  multipleTile: 0
+  multipleTileDimensions: {x: 0, y: 0}
+  baseTile: {fileID: 0}
+  probability: 10
   tileHeight: 0
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
@@ -135,25 +138,18 @@ MonoBehaviour:
   rotateLeft: 0
   rotation: {x: 0, y: 0, z: 0}
   scale: {x: 0, y: 0, z: 0}
-  defineNeighboursManually: 0
+  defineNeighboursManually: 1
   upNeighbours:
-  - {fileID: 7497326705882989147, guid: 7c42b03817f730449a1564a1b411e73c, type: 3}
-  - {fileID: 1169635391932251245}
-  - {fileID: 0}
-  rightNeighbours:
   - {fileID: 2620337285433500324, guid: e1390bd85edb4004680fbe1b5be5e4f1, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  rightNeighbours:
+  - {fileID: 1169635391932251245}
   downNeighbours:
   - {fileID: 7497326705882989147, guid: 7c42b03817f730449a1564a1b411e73c, type: 3}
-  - {fileID: 1169635391932251245}
-  - {fileID: 0}
   leftNeighbours:
-  - {fileID: 7497326705882989147, guid: 7c42b03817f730449a1564a1b411e73c, type: 3}
-  - {fileID: 0}
-  upBorder: 2
-  rightBorder: 0
-  leftBorder: 2
+  - {fileID: 1169635391932251245}
+  upBorder: 0
+  rightBorder: 4
+  leftBorder: 4
   downBorder: 2
 --- !u!64 &4239657436874650964
 MeshCollider:

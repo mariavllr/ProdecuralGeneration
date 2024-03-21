@@ -15,6 +15,7 @@ public class WaveFunction_FiToon : MonoBehaviour
     [SerializeField] public int dimensionsX;                      //The map is a square
     [SerializeField] public int dimensionsY;                      //The map is a square
     [SerializeField] public Tile_FiToon[] tileObjects;                  //All the map tiles that you can use
+    [SerializeField] Tile_FiToon comodinTile;
 
 
     [Header("Paths")]
@@ -236,7 +237,7 @@ public class WaveFunction_FiToon : MonoBehaviour
     {
         foreach(Tile_FiToon tile in tileArray)
         {
-            if (tile.defineNeighboursManually) continue;
+            if (tile.defineNeighboursManually || tile.multipleTile) continue;
             foreach (Tile_FiToon otherTile in otherTileArray)
             {
                 //Vecinos de arriba, los que coincidan en el borde de abajo
@@ -313,8 +314,9 @@ IEnumerator CheckEntropy()
         //The result of this calculation determines the order of the elements in the sorted list.
         //If the result is negative, it means a should come before b; if positive, it means a should come after b;
         //and if zero, their order remains unchanged.
-        tempGrid.Sort((a, b) => { return a.tileOptions.Length - b.tileOptions.Length; });
 
+        //Para generacion aleatoria, no en linea:
+        //tempGrid.Sort((a, b) => { return a.tileOptions.Length - b.tileOptions.Length; });
         int arrLength = tempGrid[0].tileOptions.Length;
         int stopIndex = default;
 
@@ -332,17 +334,18 @@ IEnumerator CheckEntropy()
             tempGrid.RemoveRange(stopIndex, tempGrid.Count - stopIndex);
         }
 
-        yield return new WaitForSeconds(0f);
+        yield return new WaitForSeconds(0);
 
         CollapseCell(tempGrid);
     }
 
     void CollapseCell(List<Cell_FiToon> tempGrid)
     {
+        bool opcionValida = false;
         //Elegir la celda con menos tiles posibles
-        int randIndex = UnityEngine.Random.Range(0, tempGrid.Count);
+        int randIndex = 0; // Para generar aleatorio: UnityEngine.Random.Range(0, tempGrid.Count);
         Cell_FiToon cellToCollapse = tempGrid[randIndex];
-        cellToCollapse.collapsed = true;
+        
 
         //Elegir una tile para esa celda
         List<(Tile_FiToon tile, int weight)> weightedTiles = cellToCollapse.tileOptions.Select(tile => (tile, tile.probability)).ToList();
@@ -350,52 +353,136 @@ IEnumerator CheckEntropy()
 
         if (selectedTile == null)
         {
-            Debug.LogError("INCOMPATIBILITY!");
+            Debug.LogWarning("INCOMPATIBILITY!");
             Regenerate();
+            //selectedTile = comodinTile;
+            //opcionValida = true;
             return;
-        }        
-
-        cellToCollapse.tileOptions = new Tile_FiToon[] { selectedTile };
-        Tile_FiToon foundTile = cellToCollapse.tileOptions[0];
-
-        if(cellToCollapse.transform.childCount != 0)
-        {
-            foreach (Transform child in cellToCollapse.transform)
-            {
-                Destroy(child.gameObject);
-            }
         }
 
-        Tile_FiToon instantiatedTile = Instantiate(foundTile, cellToCollapse.transform.position, Quaternion.identity, cellToCollapse.transform);
-        if (instantiatedTile.rotation != Vector3.zero)
-        {
-            instantiatedTile.gameObject.transform.Rotate(foundTile.rotation, Space.Self);
-        }
         
-        //instantiatedTile.gameObject.transform.localScale = foundTile.scale;
+        while (!opcionValida)
+        {
+            if (selectedTile.multipleTile)
+            {
+                if (!MultipleTile(selectedTile, cellToCollapse)) //comprobar validez
+                {
+                    //No se vale aqui, eliminar esta posibilidad y buscar otra
+                    List<Tile_FiToon> aux = cellObj.tileOptions.ToList();
+                    aux.Remove(selectedTile);
+                    cellObj.tileOptions = aux.ToArray();
 
-        instantiatedTile.gameObject.SetActive(true);
+                    //Elegir una tile para esa celda
+                    weightedTiles = cellToCollapse.tileOptions.Select(tile => (tile, tile.probability)).ToList();
+                    selectedTile = ChooseTile(weightedTiles);
+                    opcionValida = false;
+                }
 
-        GenerateObstacles(foundTile, cellToCollapse.transform);
+                else
+                {
+                    //multiple tile se puede colocar y se ha colocado
+                    opcionValida = true;
+                }
+            }
+            else opcionValida = true; //no es multiple tile
+        }
+
+        if (!selectedTile.multipleTile)
+        {
+            cellToCollapse.tileOptions = new Tile_FiToon[] { selectedTile };
+            Tile_FiToon foundTile = cellToCollapse.tileOptions[0];
+
+            if (cellToCollapse.transform.childCount != 0)
+            {
+                foreach (Transform child in cellToCollapse.transform)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+
+            Tile_FiToon instantiatedTile = Instantiate(foundTile, cellToCollapse.transform.position, Quaternion.identity, cellToCollapse.transform);
+            if (instantiatedTile.rotation != Vector3.zero)
+            {
+                instantiatedTile.gameObject.transform.Rotate(foundTile.rotation, Space.Self);
+            }
+
+            instantiatedTile.gameObject.SetActive(true);
+            cellToCollapse.collapsed = true;
+
+            if (selectedTile.CompareTag("Obstaculo"))
+            {
+                cellToCollapse.tieneObstaculo = true;
+            }
+
+            GenerateObstacles(foundTile, cellToCollapse);
+        }
 
         UpdateGeneration();
     }
 
-    void GenerateObstacles(Tile_FiToon foundTile, Transform transform)
+    bool MultipleTile(Tile_FiToon tile, Cell_FiToon cell)
+    {
+        int index = gridComponents.IndexOf(cell);
+
+        //Obtener las coordenadas de la celda a partir del índice
+        int actualX = index % dimensionsX;
+        int actualY = index / dimensionsX;
+
+        //Comprobar que hay espacio en el mapa alrededor
+        if((tile.multipleTileDimensions.x + actualX > dimensionsX) || (tile.multipleTileDimensions.y + actualY > dimensionsY))
+        {
+            return false; //cambiar de tile en collapsed tiile
+        }
+
+        //Comprobar si están vacías alrededor
+        for (int y = actualY; y < tile.multipleTileDimensions.y + actualY; y++)
+        { 
+            for (int x = actualX; x < tile.multipleTileDimensions.x + actualX; x++)
+            {
+                if (gridComponents[x + y * dimensionsX].collapsed)
+                {
+                    return false; //cambiar de tile en collapsed tile
+                }
+            }
+        }
+
+        //Si todo funciona, colocar tile multiple
+        Instantiate(tile, cell.transform.position, Quaternion.identity, cell.transform);
+        print("Instanciado multiple");
+        print(iterations);
+        //Actualizar vecinos
+        for (int y = actualY; y < tile.multipleTileDimensions.y + actualY; y++)
+        {
+            for (int x = actualX; x < tile.multipleTileDimensions.x + actualX; x++)
+            {
+                gridComponents[x + y * dimensionsX].collapsed = true;
+                gridComponents[x + y * dimensionsX].tieneObstaculo = true;
+                gridComponents[x + y * dimensionsX].tileOptions = new Tile_FiToon[] {tile.baseTile};
+                iterations++;
+                print(iterations);
+            }
+        }
+        iterations--; //porque sumará una en el updateGeneration
+        print(iterations);
+
+        return true;
+    }
+
+    void GenerateObstacles(Tile_FiToon foundTile, Cell_FiToon cellToCollapse)
     {
         if(foundTile.gameObject.CompareTag("Hierba"))
         {
             float rand = UnityEngine.Random.Range(0, 100);
 
-            if (rand > obstaclesDensity)
+            if ((rand > obstaclesDensity) || foundTile.CompareTag("Obstaculo") || cellToCollapse.tieneObstaculo)
             {
                 return;
             }
             else
             {
                 int randomObstacle = UnityEngine.Random.Range(0, obstacleObjects.Length);
-                Vector3 position = new Vector3(transform.position.x, foundTile.tileHeight, transform.position.z);
-                Instantiate(obstacleObjects[randomObstacle], position, Quaternion.identity, transform);
+                Vector3 position = new Vector3(cellToCollapse.transform.position.x, foundTile.tileHeight, cellToCollapse.transform.position.z);
+                Instantiate(obstacleObjects[randomObstacle], position, Quaternion.identity, cellToCollapse.transform);
             }
 
         }
@@ -541,6 +628,7 @@ IEnumerator CheckEntropy()
         gridComponents = newGenerationCell;
 
         iterations++;
+        
         if (iterations <= dimensionsX * dimensionsY)
         {
             StartCoroutine(CheckEntropy());

@@ -99,7 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad286de352d6df4fa85d8db546ba686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 5
+  multipleTile: 0
+  multipleTileDimensions: {x: 0, y: 0}
+  baseTile: {fileID: 0}
+  probability: 20
   tileHeight: 2
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
@@ -113,12 +116,10 @@ MonoBehaviour:
   - {fileID: 2620337285433500324}
   rightNeighbours:
   - {fileID: 2620337285433500324}
-  - {fileID: 0}
   downNeighbours:
   - {fileID: 2620337285433500324}
   leftNeighbours:
   - {fileID: 2620337285433500324}
-  - {fileID: 5331371696172492097, guid: 1256819a4c9063b4084f7c8b33557b9a, type: 3}
   upBorder: 0
   rightBorder: 0
   leftBorder: 0

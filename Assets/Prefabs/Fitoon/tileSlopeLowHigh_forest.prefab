@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2727153479334031467
+--- !u!1 &7596029846545694721
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1565441739872081435}
-  - component: {fileID: 451306500764519380}
-  - component: {fileID: 6270097922656509410}
-  - component: {fileID: 5331371696172492097}
-  - component: {fileID: -9181126532105760144}
-  - component: {fileID: 9081665423601942275}
+  - component: {fileID: 2416535423414406417}
+  - component: {fileID: 3941622998040503524}
+  - component: {fileID: 5135646511349747126}
+  - component: {fileID: 9144809091631896250}
+  - component: {fileID: -465345300824852584}
+  - component: {fileID: 8861459255690582201}
   m_Layer: 0
   m_Name: tileSlopeLowHigh_forest
   m_TagString: Untagged
@@ -21,36 +21,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1565441739872081435
+--- !u!4 &2416535423414406417
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727153479334031467}
+  m_GameObject: {fileID: 7596029846545694721}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.5527558, y: 0, z: 2.5635767}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.697075, y: 0.00000023841858, z: 30.028576}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &451306500764519380
+--- !u!33 &3941622998040503524
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727153479334031467}
+  m_GameObject: {fileID: 7596029846545694721}
   m_Mesh: {fileID: 783595383927923169, guid: f803800afe6cd324a993390a98077774, type: 3}
---- !u!23 &6270097922656509410
+--- !u!23 &5135646511349747126
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727153479334031467}
+  m_GameObject: {fileID: 7596029846545694721}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -87,49 +87,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5331371696172492097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727153479334031467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ad286de352d6df4fa85d8db546ba686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  probability: 1
-  tileHeight: 2
-  isHorizontalSymetric: 0
-  isVerticalSymetric: 0
-  rotateRight: 0
-  rotate180: 1
-  rotateLeft: 0
-  rotation: {x: 0, y: 0, z: 0}
-  scale: {x: 0, y: 0, z: 0}
-  defineNeighboursManually: 1
-  upNeighbours:
-  - {fileID: 8691736144607488192, guid: 2d05fd5e4aa4001449e692a7a4597a6c, type: 3}
-  - {fileID: 2620337285433500324, guid: e1390bd85edb4004680fbe1b5be5e4f1, type: 3}
-  rightNeighbours:
-  - {fileID: 2620337285433500324, guid: e1390bd85edb4004680fbe1b5be5e4f1, type: 3}
-  downNeighbours:
-  - {fileID: 8691736144607488192, guid: 2d05fd5e4aa4001449e692a7a4597a6c, type: 3}
-  - {fileID: 2620337285433500324, guid: e1390bd85edb4004680fbe1b5be5e4f1, type: 3}
-  leftNeighbours:
-  - {fileID: 8691736144607488192, guid: 2d05fd5e4aa4001449e692a7a4597a6c, type: 3}
-  upBorder: 1
-  rightBorder: 0
-  leftBorder: 1
-  downBorder: 1
---- !u!54 &-9181126532105760144
+--- !u!54 &9144809091631896250
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727153479334031467}
+  m_GameObject: {fileID: 7596029846545694721}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -150,13 +114,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &9081665423601942275
+--- !u!64 &-465345300824852584
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2727153479334031467}
+  m_GameObject: {fileID: 7596029846545694721}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -172,3 +136,40 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 783595383927923169, guid: f803800afe6cd324a993390a98077774, type: 3}
+--- !u!114 &8861459255690582201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7596029846545694721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad286de352d6df4fa85d8db546ba686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  multipleTile: 0
+  multipleTileDimensions: {x: 0, y: 0}
+  baseTile: {fileID: 0}
+  probability: 10
+  tileHeight: 2
+  isHorizontalSymetric: 0
+  isVerticalSymetric: 0
+  rotateRight: 0
+  rotate180: 1
+  rotateLeft: 0
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 0, y: 0, z: 0}
+  defineNeighboursManually: 1
+  upNeighbours:
+  - {fileID: 2620337285433500324, guid: e1390bd85edb4004680fbe1b5be5e4f1, type: 3}
+  rightNeighbours:
+  - {fileID: 8861459255690582201}
+  downNeighbours:
+  - {fileID: 8691736144607488192, guid: 2d05fd5e4aa4001449e692a7a4597a6c, type: 3}
+  leftNeighbours:
+  - {fileID: 8861459255690582201}
+  upBorder: 0
+  rightBorder: 3
+  leftBorder: 3
+  downBorder: 1

@@ -99,7 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad286de352d6df4fa85d8db546ba686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 5
+  multipleTile: 0
+  multipleTileDimensions: {x: 0, y: 0}
+  baseTile: {fileID: 0}
+  probability: 20
   tileHeight: 1
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
@@ -111,22 +114,18 @@ MonoBehaviour:
   defineNeighboursManually: 0
   upNeighbours:
   - {fileID: 8691736144607488192}
-  - {fileID: 5331371696172492097, guid: 1256819a4c9063b4084f7c8b33557b9a, type: 3}
-  - {fileID: 8675012620524012246, guid: f240185ce55ab8547b5c698bb913747a, type: 3}
-  - {fileID: 0}
+  - {fileID: 8861459255690582201, guid: 1256819a4c9063b4084f7c8b33557b9a, type: 3}
+  - {fileID: 8143165275106375216, guid: cb9877e7b5cc2e24eb12b10f6d7365b1, type: 3}
   rightNeighbours:
   - {fileID: 8691736144607488192}
-  - {fileID: 5331371696172492097, guid: 1256819a4c9063b4084f7c8b33557b9a, type: 3}
-  - {fileID: 8675012620524012246, guid: f240185ce55ab8547b5c698bb913747a, type: 3}
+  - {fileID: 8143165275106375216, guid: cb9877e7b5cc2e24eb12b10f6d7365b1, type: 3}
   downNeighbours:
   - {fileID: 8691736144607488192}
-  - {fileID: 5331371696172492097, guid: 1256819a4c9063b4084f7c8b33557b9a, type: 3}
-  - {fileID: 8675012620524012246, guid: f240185ce55ab8547b5c698bb913747a, type: 3}
+  - {fileID: 8143165275106375216, guid: cb9877e7b5cc2e24eb12b10f6d7365b1, type: 3}
   - {fileID: 0}
   leftNeighbours:
   - {fileID: 8691736144607488192}
-  - {fileID: 8675012620524012246, guid: f240185ce55ab8547b5c698bb913747a, type: 3}
-  - {fileID: 0}
+  - {fileID: 8143165275106375216, guid: cb9877e7b5cc2e24eb12b10f6d7365b1, type: 3}
   upBorder: 1
   rightBorder: 1
   leftBorder: 1

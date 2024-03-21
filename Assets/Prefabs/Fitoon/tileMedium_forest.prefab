@@ -99,7 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad286de352d6df4fa85d8db546ba686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  probability: 5
+  multipleTile: 0
+  multipleTileDimensions: {x: 0, y: 0}
+  baseTile: {fileID: 0}
+  probability: 20
   tileHeight: 1.5
   isHorizontalSymetric: 0
   isVerticalSymetric: 0
@@ -112,17 +115,17 @@ MonoBehaviour:
   upNeighbours:
   - {fileID: 7497326705882989147}
   - {fileID: 1169635391932251245, guid: 104e785dfc6fb9442ac892b054e74ce5, type: 3}
-  - {fileID: 0}
+  - {fileID: 1995069573428579231, guid: 88287c4b58353ec4e8a38715a2a3c9ba, type: 3}
   rightNeighbours:
   - {fileID: 7497326705882989147}
-  - {fileID: 1169635391932251245, guid: 104e785dfc6fb9442ac892b054e74ce5, type: 3}
+  - {fileID: 1995069573428579231, guid: 88287c4b58353ec4e8a38715a2a3c9ba, type: 3}
   downNeighbours:
   - {fileID: 7497326705882989147}
-  - {fileID: 1169635391932251245, guid: 104e785dfc6fb9442ac892b054e74ce5, type: 3}
+  - {fileID: 1995069573428579231, guid: 88287c4b58353ec4e8a38715a2a3c9ba, type: 3}
   - {fileID: 0}
   leftNeighbours:
   - {fileID: 7497326705882989147}
-  - {fileID: 0}
+  - {fileID: 1995069573428579231, guid: 88287c4b58353ec4e8a38715a2a3c9ba, type: 3}
   upBorder: 2
   rightBorder: 2
   leftBorder: 2

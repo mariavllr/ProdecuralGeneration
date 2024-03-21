@@ -9,14 +9,24 @@ public class Tile_FiToon : MonoBehaviour
         HIGH_GRASS,
         LOW_GRASS,
         MEDIUM_GRASS,
+        HIGH_SLOPE,
+        MEDIUM_SLOPE,
         PATH,
         WATER
     }
 
+    [Header("Only if MULTIPLE TILE")]
+    public bool multipleTile;
+    public Vector2 multipleTileDimensions;
+    public Tile_FiToon baseTile;
+
+
+    [Header("Basic properties")]
     public int probability;
     public float tileHeight;
     public bool isHorizontalSymetric;
     public bool isVerticalSymetric;
+
     [Header("Create rotated tiles")]
     public bool rotateRight;
     public bool rotate180;
